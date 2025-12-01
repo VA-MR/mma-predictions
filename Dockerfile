@@ -34,8 +34,7 @@ COPY main.py ./
 # Copy frontend build from previous stage
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
-# Copy database if exists (for staging with data)
-COPY mma_data.db* ./
+# Database will be created automatically on first run
 
 # Expose port
 EXPOSE 8000
