@@ -48,11 +48,11 @@ export default function Layout() {
                     {user.photo_url && (
                       <img 
                         src={user.photo_url} 
-                        alt={user.username} 
+                        alt={user.username || 'User'} 
                         className="user-avatar" 
                       />
                     )}
-                    <span className="user-name">{user.username}</span>
+                    <span className="user-name">{user.username || 'User'}</span>
                     <button onClick={logout} className="logout-btn">
                       Выйти
                     </button>

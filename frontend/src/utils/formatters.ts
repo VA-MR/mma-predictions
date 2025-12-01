@@ -98,7 +98,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
  * @param country - Country name (English or Russian)
  * @returns Flag emoji or globe emoji if not found
  */
-export function getCountryFlag(country: string | null): string {
+export function getCountryFlag(country: string | null | undefined): string {
   if (!country) return '🌍';
   return COUNTRY_FLAGS[country] || '🌍';
 }

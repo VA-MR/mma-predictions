@@ -12,7 +12,7 @@ export default function FightCard({ fight, index }: FightCardProps) {
   const fighter1 = fight.fighter1;
   const fighter2 = fight.fighter2;
 
-  const getCountryFlag = (country: string | null) => {
+  const getCountryFlag = (country: string | null | undefined) => {
     if (!country) return '🌍';
     const flags: Record<string, string> = {
       'USA': '🇺🇸', 'United States': '🇺🇸', 'US': '🇺🇸',
