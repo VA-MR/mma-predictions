@@ -34,7 +34,8 @@ COPY main.py ./
 # Copy frontend build from previous stage
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
-# Database will be created automatically on first run
+# Copy database with scraped data
+COPY mma_data.db ./
 
 # Default port
 ENV PORT=8000
