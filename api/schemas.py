@@ -52,6 +52,10 @@ class FightResponse(FightBase):
     event_id: int
     fighter1: Optional[FighterResponse] = None
     fighter2: Optional[FighterResponse] = None
+    # Event metadata
+    event_name: Optional[str] = None
+    event_date: Optional[date] = None
+    organization: Optional[str] = None
 
     class Config:
         from_attributes = True

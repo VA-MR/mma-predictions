@@ -26,6 +26,10 @@ export interface Fight {
   fight_order: number | null;
   fighter1: Fighter | null;
   fighter2: Fighter | null;
+  // Event metadata
+  event_name: string | null;
+  event_date: string | null;
+  organization: string | null;
 }
 
 export interface MainEventInfo {

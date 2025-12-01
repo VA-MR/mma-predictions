@@ -178,6 +178,42 @@
   font-size: 0.75rem;
 }
 
+.pick-event {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.pick-event .event-org {
+  background: var(--primary);
+  color: var(--text-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pick-event .event-name {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.pick-event .event-name:hover {
+  color: var(--primary);
+}
+
+.pick-event .event-date {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
 .pick-fight {
   display: flex;
   align-items: center;
@@ -200,6 +236,16 @@
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.pick-fight .weight-class {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  margin-left: auto;
 }
 
 .pick-details {

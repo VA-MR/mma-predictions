@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   getMyPredictions,
@@ -10,6 +10,7 @@ import {
   UserStats,
 } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
+import { formatDateShort } from '../utils/formatters';
 import './ProfilePage.css';
 
 const WIN_METHOD_LABELS: Record<string, string> = {
@@ -156,11 +157,25 @@ export default function ProfilePage() {
                       </span>
                     </div>
                     {fight && (
-                      <div className="pick-fight">
-                        <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
-                        <span className="vs">vs</span>
-                        <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
-                      </div>
+                      <>
+                        <div className="pick-event">
+                          <span className="event-org">{fight.organization}</span>
+                          <Link to={`/fights/${fight.id}`} className="event-name">
+                            {fight.event_name}
+                          </Link>
+                          {fight.event_date && (
+                            <span className="event-date">{formatDateShort(fight.event_date)}</span>
+                          )}
+                        </div>
+                        <div className="pick-fight">
+                          <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
+                          <span className="vs">vs</span>
+                          <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
+                          {fight.weight_class && (
+                            <span className="weight-class">{fight.weight_class}</span>
+                          )}
+                        </div>
+                      </>
                     )}
                     <div className="pick-details">
                       <span className={`pick-winner ${prediction.predicted_winner}`}>
@@ -210,11 +225,25 @@ export default function ProfilePage() {
                       </span>
                     </div>
                     {fight && (
-                      <div className="pick-fight">
-                        <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
-                        <span className="vs">vs</span>
-                        <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
-                      </div>
+                      <>
+                        <div className="pick-event">
+                          <span className="event-org">{fight.organization}</span>
+                          <Link to={`/fights/${fight.id}`} className="event-name">
+                            {fight.event_name}
+                          </Link>
+                          {fight.event_date && (
+                            <span className="event-date">{formatDateShort(fight.event_date)}</span>
+                          )}
+                        </div>
+                        <div className="pick-fight">
+                          <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
+                          <span className="vs">vs</span>
+                          <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
+                          {fight.weight_class && (
+                            <span className="weight-class">{fight.weight_class}</span>
+                          )}
+                        </div>
+                      </>
                     )}
                     <div className="scorecard-summary">
                       <div className="scorecard-total">

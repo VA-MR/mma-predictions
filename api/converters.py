@@ -39,6 +39,15 @@ def fight_to_response(fight: Fight) -> FightResponse:
 
     if fight.fighter2:
         fighter2 = fighter_to_response(fight.fighter2)
+    
+    # Get event metadata if available
+    event_name = None
+    event_date = None
+    organization = None
+    if fight.event:
+        event_name = fight.event.name
+        event_date = fight.event.event_date
+        organization = fight.event.organization
 
     return FightResponse(
         id=fight.id,
@@ -50,6 +59,9 @@ def fight_to_response(fight: Fight) -> FightResponse:
         fight_order=fight.fight_order,
         fighter1=fighter1,
         fighter2=fighter2,
+        event_name=event_name,
+        event_date=event_date,
+        organization=organization,
     )
 
 
