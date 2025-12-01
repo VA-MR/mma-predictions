@@ -177,7 +177,7 @@ export default function ProfilePage() {
                     </div>
                   </motion.div>
                 );
-              }))
+              })
             )}
           </>
         )}
@@ -232,7 +232,7 @@ export default function ProfilePage() {
                     </div>
                   </motion.div>
                 );
-              }))
+              })
             )}
           </>
         )}
