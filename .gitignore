@@ -11,8 +11,7 @@ env/
 dist/
 build/
 
-# Database
-*.db
+# Database (mma_data.db is tracked for staging)
 *.sqlite3
 
 # Node.js
