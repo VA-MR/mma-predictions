@@ -98,17 +98,6 @@ app.include_router(scorecards_router, prefix="/api")
 app.include_router(users_router, prefix="/api")
 
 
-@app.get("/")
-async def root():
-    """API root endpoint with basic info."""
-    return {
-        "name": "MMA Scoring API",
-        "version": "1.0.0",
-        "docs": "/docs",
-        "openapi": "/openapi.json",
-    }
-
-
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
@@ -126,6 +115,12 @@ if FRONTEND_BUILD_PATH.exists():
     # Mount static assets
     app.mount("/assets", StaticFiles(directory=FRONTEND_BUILD_PATH / "assets"), name="assets")
     
+    # Serve index.html for root
+    @app.get("/")
+    async def serve_index():
+        """Serve the SPA index.html for root."""
+        return FileResponse(FRONTEND_BUILD_PATH / "index.html")
+    
     # Serve index.html for all non-API routes (SPA fallback)
     @app.get("/{full_path:path}")
     async def serve_spa(request: Request, full_path: str):
@@ -141,6 +136,17 @@ if FRONTEND_BUILD_PATH.exists():
         
         # Return index.html for SPA routing
         return FileResponse(FRONTEND_BUILD_PATH / "index.html")
+else:
+    # No frontend - serve API info at root
+    @app.get("/")
+    async def root():
+        """API root endpoint with basic info."""
+        return {
+            "name": "MMA Scoring API",
+            "version": "1.0.0",
+            "docs": "/docs",
+            "openapi": "/openapi.json",
+        }
 
 
 if __name__ == "__main__":
