@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <rect width="200" height="80" fill="#1a1a2e"/>
+  <text x="100" y="35" font-family="Arial Black, Arial, sans-serif" font-size="28" font-weight="900" fill="#00BFFF" text-anchor="middle">OPEN</text>
+  <text x="100" y="62" font-family="Arial Black, Arial, sans-serif" font-size="24" font-weight="900" fill="#FFF" text-anchor="middle">FC</text>
+</svg>
+

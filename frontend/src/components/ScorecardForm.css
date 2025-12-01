@@ -1,0 +1,321 @@
+.scorecard-form {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--border-color);
+}
+
+.scorecard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.scorecard-header h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scorecard-header h3::before {
+  content: '📝';
+}
+
+.scoring-guide-link {
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: color 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scoring-guide-link:hover {
+  color: var(--primary-light);
+}
+
+.scoring-hint {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-bottom: var(--space-xl);
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--primary);
+}
+
+/* Fighter Names */
+.scorecard-fighters {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.fighter-col {
+  text-align: center;
+}
+
+.fighter-col.fighter1 {
+  text-align: left;
+}
+
+.fighter-col.fighter2 {
+  text-align: right;
+}
+
+.fighter-col .fighter-name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.fighter-col.fighter1 .fighter-name {
+  color: var(--accent-red);
+}
+
+.fighter-col.fighter2 .fighter-name {
+  color: var(--accent-blue);
+}
+
+.round-col {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* Rounds */
+.rounds-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.round-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-sm) 0;
+}
+
+.score-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.score-buttons.fighter1 {
+  justify-content: flex-start;
+}
+
+.score-buttons.fighter2 {
+  justify-content: flex-end;
+}
+
+.score-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-weight: 700;
+  transition: all 0.15s;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.score-btn:hover:not(:disabled) {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.score-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.score-buttons.fighter1 .score-btn.selected {
+  border-color: var(--accent-red);
+  background: var(--accent-red);
+  color: white;
+}
+
+.score-buttons.fighter2 .score-btn.selected {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue);
+  color: white;
+}
+
+.round-number {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Totals */
+.scorecard-totals {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+.total {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--text-secondary);
+}
+
+.total.fighter1 {
+  text-align: left;
+}
+
+.total.fighter2 {
+  text-align: right;
+}
+
+.total.winner {
+  color: var(--primary);
+}
+
+.total-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Winner */
+.scorecard-winner {
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.winner-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.winner-text.fighter1 {
+  color: var(--accent-red);
+}
+
+.winner-text.fighter2 {
+  color: var(--accent-blue);
+}
+
+.winner-text.draw {
+  color: var(--text-muted);
+}
+
+/* Submit */
+.submit-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-xl);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-error {
+  color: var(--accent-red);
+  font-size: 0.75rem;
+  margin-top: var(--space-sm);
+  text-align: center;
+  padding: var(--space-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.form-notice,
+.locked-notice {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.locked-notice {
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .score-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.8rem;
+  }
+
+  .round-number {
+    width: 34px;
+    height: 34px;
+    font-size: 0.8rem;
+  }
+
+  .scorecard-fighters {
+    display: none;
+  }
+
+  .total {
+    font-size: 1.75rem;
+  }
+}

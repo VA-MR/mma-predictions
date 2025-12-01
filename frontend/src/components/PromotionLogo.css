@@ -1,0 +1,65 @@
+.promotion-logo-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.promotion-logo {
+  display: block;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.promotion-logo--sm {
+  border-radius: 2px;
+}
+
+.promotion-logo--lg,
+.promotion-logo--xl {
+  border-radius: 3px;
+}
+
+.promotion-logo-fallback {
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.promotion-logo-text {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text-primary, #fff);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Logo showcase grid */
+.logos-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.logo-showcase-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.15s;
+}
+
+.logo-showcase-item:hover {
+  border-color: var(--primary);
+}
+
+.logo-showcase-item .logo-name {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

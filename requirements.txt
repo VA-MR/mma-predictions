@@ -1,0 +1,32 @@
+# MMA Event Scraper & Scoring App Dependencies
+
+# HTTP requests
+requests>=2.31.0
+
+# HTML parsing
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data validation
+pydantic>=2.5.0
+
+# Database ORM
+sqlalchemy>=2.0.0
+
+# Nice console output
+rich>=13.7.0
+
+# Rate limiting
+ratelimit>=2.2.1
+
+# FastAPI backend
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# CORS and environment
+python-dotenv>=1.0.0
+

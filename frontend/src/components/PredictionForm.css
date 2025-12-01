@@ -1,0 +1,285 @@
+.prediction-form,
+.prediction-submitted {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--border-color);
+}
+
+.prediction-form h3,
+.prediction-submitted h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prediction-form h3::before {
+  content: '🎯';
+}
+
+.form-section {
+  margin-bottom: var(--space-xl);
+}
+
+.form-label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Winner Buttons */
+.winner-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.winner-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg);
+  text-align: center;
+  transition: all 0.15s;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.winner-btn:hover {
+  border-color: var(--text-muted);
+}
+
+.winner-btn.fighter1.selected {
+  border-color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.winner-btn.fighter2.selected {
+  border-color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.winner-btn .fighter-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.winner-btn .fighter-record {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* Method Buttons */
+.method-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+.method-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  text-align: center;
+  transition: all 0.15s;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.method-btn:hover {
+  border-color: var(--text-muted);
+}
+
+.method-btn.selected {
+  border-color: var(--primary);
+  background: rgba(147, 51, 234, 0.15);
+}
+
+.method-icon {
+  display: block;
+  font-size: 1.25rem;
+  margin-bottom: var(--space-xs);
+}
+
+.method-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Confidence Slider */
+.confidence-slider {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  outline: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--border-color);
+}
+
+.confidence-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 2px solid var(--bg-card);
+}
+
+.confidence-labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  margin-top: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-lg);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-error {
+  color: var(--accent-red);
+  font-size: 0.75rem;
+  margin-top: var(--space-sm);
+  text-align: center;
+  padding: var(--space-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.form-notice {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Submitted State */
+.submitted-pick {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xl);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--accent-green);
+}
+
+.pick-winner {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.pick-method {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.locked-notice {
+  text-align: center;
+  color: var(--accent-green);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.locked-notice::before {
+  content: '✓';
+  width: 18px;
+  height: 18px;
+  background: var(--accent-green);
+  color: #000;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+/* Auth Required */
+.auth-required {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.auth-required::before {
+  content: '🔒';
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 480px) {
+  .method-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .winner-btn .fighter-name {
+    font-size: 0.9rem;
+  }
+}

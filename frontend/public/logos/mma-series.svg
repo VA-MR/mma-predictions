@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <rect width="200" height="80" fill="#222"/>
+  <text x="100" y="35" font-family="Arial Black, Arial, sans-serif" font-size="24" font-weight="900" fill="#FFF" text-anchor="middle">MMA</text>
+  <text x="100" y="60" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" fill="#FF4444" text-anchor="middle">SERIES</text>
+</svg>
+

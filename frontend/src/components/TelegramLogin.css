@@ -1,0 +1,58 @@
+.telegram-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.telegram-widget {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.telegram-hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.telegram-login-loading {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.telegram-login-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: #0088cc;
+  color: white;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.telegram-login-btn:hover {
+  background: #0077b5;
+}
+
+.telegram-login-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .telegram-hint {
+    display: none;
+  }
+}
