@@ -149,6 +149,7 @@ class PredictionResponse(BaseModel):
     confidence: Optional[int] = None
     created_at: datetime
     user: Optional[UserResponse] = None
+    fight: Optional["FightResponse"] = None
 
     class Config:
         from_attributes = True
@@ -195,6 +196,7 @@ class ScorecardResponse(BaseModel):
     total_fighter2: int
     winner: Optional[str] = None
     user: Optional[UserResponse] = None
+    fight: Optional["FightResponse"] = None
 
     class Config:
         from_attributes = True

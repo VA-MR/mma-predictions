@@ -135,35 +135,49 @@ export default function ProfilePage() {
                 </p>
               </div>
             ) : (
-              predictions.map((prediction, index) => (
-                <motion.div
-                  key={prediction.id}
-                  className="pick-card"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <div className="pick-info">
-                    <span className="pick-type">Prediction</span>
-                    <span className="pick-date">
-                      {new Date(prediction.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="pick-details">
-                    <span className={`pick-winner ${prediction.predicted_winner}`}>
-                      {prediction.predicted_winner === 'fighter1' ? 'Fighter 1' : 'Fighter 2'}
-                    </span>
-                    <span className="pick-method">
-                      by {WIN_METHOD_LABELS[prediction.win_method]}
-                    </span>
-                    {prediction.confidence && (
-                      <span className="pick-confidence">
-                        Confidence: {prediction.confidence}/5
+              predictions.map((prediction, index) => {
+                const fight = prediction.fight;
+                const winnerName = prediction.predicted_winner === 'fighter1' 
+                  ? fight?.fighter1?.name || 'Fighter 1'
+                  : fight?.fighter2?.name || 'Fighter 2';
+                
+                return (
+                  <motion.div
+                    key={prediction.id}
+                    className="pick-card"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <div className="pick-info">
+                      <span className="pick-type">Prediction</span>
+                      <span className="pick-date">
+                        {new Date(prediction.created_at).toLocaleDateString()}
                       </span>
+                    </div>
+                    {fight && (
+                      <div className="pick-fight">
+                        <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
+                        <span className="vs">vs</span>
+                        <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
+                      </div>
                     )}
-                  </div>
-                </motion.div>
-              ))
+                    <div className="pick-details">
+                      <span className={`pick-winner ${prediction.predicted_winner}`}>
+                        {winnerName}
+                      </span>
+                      <span className="pick-method">
+                        by {WIN_METHOD_LABELS[prediction.win_method]}
+                      </span>
+                      {prediction.confidence && (
+                        <span className="pick-confidence">
+                          Confidence: {prediction.confidence}/5
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              }))
             )}
           </>
         )}
@@ -178,36 +192,47 @@ export default function ProfilePage() {
                 </p>
               </div>
             ) : (
-              scorecards.map((scorecard, index) => (
-                <motion.div
-                  key={scorecard.id}
-                  className="pick-card scorecard-card"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <div className="pick-info">
-                    <span className="pick-type">Scorecard</span>
-                    <span className="pick-date">
-                      {new Date(scorecard.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="scorecard-summary">
-                    <div className="scorecard-total">
-                      <span className="score fighter1">{scorecard.total_fighter1}</span>
-                      <span className="score-divider">-</span>
-                      <span className="score fighter2">{scorecard.total_fighter2}</span>
+              scorecards.map((scorecard, index) => {
+                const fight = scorecard.fight;
+                
+                return (
+                  <motion.div
+                    key={scorecard.id}
+                    className="pick-card scorecard-card"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <div className="pick-info">
+                      <span className="pick-type">Scorecard</span>
+                      <span className="pick-date">
+                        {new Date(scorecard.created_at).toLocaleDateString()}
+                      </span>
                     </div>
-                    <div className="round-scores">
-                      {scorecard.round_scores.map((rs) => (
-                        <span key={rs.round_number} className="round-score">
-                          R{rs.round_number}: {rs.fighter1_score}-{rs.fighter2_score}
-                        </span>
-                      ))}
+                    {fight && (
+                      <div className="pick-fight">
+                        <span className="fighter-name">{fight.fighter1?.name || 'TBA'}</span>
+                        <span className="vs">vs</span>
+                        <span className="fighter-name">{fight.fighter2?.name || 'TBA'}</span>
+                      </div>
+                    )}
+                    <div className="scorecard-summary">
+                      <div className="scorecard-total">
+                        <span className="score fighter1">{scorecard.total_fighter1}</span>
+                        <span className="score-divider">-</span>
+                        <span className="score fighter2">{scorecard.total_fighter2}</span>
+                      </div>
+                      <div className="round-scores">
+                        {scorecard.round_scores.map((rs) => (
+                          <span key={rs.round_number} className="round-score">
+                            R{rs.round_number}: {rs.fighter1_score}-{rs.fighter2_score}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))
+                  </motion.div>
+                );
+              }))
             )}
           </>
         )}

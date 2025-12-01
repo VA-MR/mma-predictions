@@ -70,11 +70,16 @@ def user_to_response(user: User) -> UserResponse:
 def prediction_to_response(
     prediction: Prediction,
     include_user: bool = True,
+    include_fight: bool = False,
 ) -> PredictionResponse:
     """Convert Prediction model to PredictionResponse schema."""
     user_response = None
     if include_user and prediction.user:
         user_response = user_to_response(prediction.user)
+    
+    fight_response = None
+    if include_fight and prediction.fight:
+        fight_response = fight_to_response(prediction.fight)
 
     return PredictionResponse(
         id=prediction.id,
@@ -85,17 +90,23 @@ def prediction_to_response(
         confidence=prediction.confidence,
         created_at=prediction.created_at,
         user=user_response,
+        fight=fight_response,
     )
 
 
 def scorecard_to_response(
     scorecard: Scorecard,
     include_user: bool = True,
+    include_fight: bool = False,
 ) -> ScorecardResponse:
     """Convert Scorecard model to ScorecardResponse schema."""
     user_response = None
     if include_user and scorecard.user:
         user_response = user_to_response(scorecard.user)
+    
+    fight_response = None
+    if include_fight and scorecard.fight:
+        fight_response = fight_to_response(scorecard.fight)
 
     round_scores = [
         RoundScoreResponse(
@@ -117,6 +128,7 @@ def scorecard_to_response(
         total_fighter2=scorecard.total_fighter2,
         winner=scorecard.winner,
         user=user_response,
+        fight=fight_response,
     )
 
 

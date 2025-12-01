@@ -72,6 +72,7 @@ export interface Prediction {
   confidence: number | null;
   created_at: string;
   user?: User;
+  fight?: Fight;
 }
 
 export interface RoundScore {
@@ -91,6 +92,7 @@ export interface Scorecard {
   total_fighter2: number;
   winner: string | null;
   user?: User;
+  fight?: Fight;
 }
 
 export interface PredictionStats {

@@ -136,7 +136,7 @@ async def get_my_scorecards(
     """Get all scorecards submitted by the current user."""
     with db.get_session() as session:
         scorecards = db.get_user_scorecards(session, user.id)
-        return [scorecard_to_response(sc, include_user=False) for sc in scorecards]
+        return [scorecard_to_response(sc, include_user=False, include_fight=True) for sc in scorecards]
 
 
 @router.get("/mine/fight/{fight_id}", response_model=ScorecardResponse)

@@ -112,7 +112,7 @@ async def get_my_predictions(
     """Get all predictions made by the current user."""
     with db.get_session() as session:
         predictions = db.get_user_predictions(session, user.id)
-        return [prediction_to_response(p, include_user=False) for p in predictions]
+        return [prediction_to_response(p, include_user=False, include_fight=True) for p in predictions]
 
 
 @router.get("/mine/fight/{fight_id}", response_model=PredictionResponse)
