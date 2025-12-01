@@ -36,9 +36,9 @@ COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
 # Database will be created automatically on first run
 
-# Expose port (Railway uses $PORT env variable)
-EXPOSE ${PORT:-8000}
+# Default port
+ENV PORT=8000
 
 # Run the application with PORT from environment
-CMD uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}
+CMD ["/bin/sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port $PORT"]
 
