@@ -171,6 +171,11 @@ class Database:
         stmt = select(Fighter).where(Fighter.name == name)
         return session.execute(stmt).scalar_one_or_none()
     
+    def get_fighter_by_id(self, session: Session, fighter_id: int) -> Optional[Fighter]:
+        """Get fighter by ID."""
+        stmt = select(Fighter).where(Fighter.id == fighter_id)
+        return session.execute(stmt).scalar_one_or_none()
+    
     def get_all_fighters(self, session: Session) -> List[Fighter]:
         """Get all fighters."""
         stmt = select(Fighter).order_by(Fighter.name)

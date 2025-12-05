@@ -1,6 +1,6 @@
 """Authentication routes."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -32,8 +32,8 @@ async def telegram_login(
         )
     
     # Check if auth is not too old (within 24 hours)
-    auth_datetime = datetime.fromtimestamp(auth_data.auth_date)
-    if (datetime.utcnow() - auth_datetime).days > 1:
+    auth_datetime = datetime.fromtimestamp(auth_data.auth_date, tz=timezone.utc)
+    if (datetime.now(timezone.utc) - auth_datetime).days > 1:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication data expired. Please sign in again.",

@@ -43,6 +43,14 @@ class PredictedWinner(str, Enum):
     FIGHTER2 = "fighter2"
 
 
+class FightWinner(str, Enum):
+    """Official fight result winner."""
+    FIGHTER1 = "fighter1"
+    FIGHTER2 = "fighter2"
+    DRAW = "draw"
+    NO_CONTEST = "no_contest"
+
+
 class Base(DeclarativeBase):
     """Base class for all models."""
     pass
@@ -64,7 +72,7 @@ class Fighter(Base):
     # Physical stats
     age: Mapped[Optional[int]] = mapped_column(Integer)
     height_cm: Mapped[Optional[int]] = mapped_column(Integer)
-    weight_kg: Mapped[Optional[float]] = mapped_column(Integer)
+    weight_kg: Mapped[Optional[float]] = mapped_column(Integer)  # Stored as int, exposed as float
     reach_cm: Mapped[Optional[int]] = mapped_column(Integer)
     
     # Fighting info
@@ -189,6 +197,9 @@ class Fight(Base):
     scorecards: Mapped[List["Scorecard"]] = relationship(
         "Scorecard", back_populates="fight", cascade="all, delete-orphan"
     )
+    result: Mapped[Optional["FightResult"]] = relationship(
+        "FightResult", back_populates="fight", uselist=False, cascade="all, delete-orphan"
+    )
     
     def __repr__(self) -> str:
         f1_name = self.fighter1.name if self.fighter1 else "TBA"
@@ -254,6 +265,10 @@ class Prediction(Base):
     confidence: Mapped[Optional[int]] = mapped_column(Integer)  # 1-5 confidence level
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     
+    # Resolution fields
+    is_correct: Mapped[Optional[bool]] = mapped_column(default=None)
+    resolved_at: Mapped[Optional[datetime]] = mapped_column(DateTime, default=None)
+    
     # Relationships
     user: Mapped["User"] = relationship("User", back_populates="predictions")
     fight: Mapped["Fight"] = relationship("Fight", back_populates="predictions")
@@ -278,6 +293,11 @@ class Scorecard(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     fight_id: Mapped[int] = mapped_column(ForeignKey("fights.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    
+    # Resolution fields
+    correct_rounds: Mapped[int] = mapped_column(Integer, default=0)
+    total_rounds: Mapped[int] = mapped_column(Integer, default=0)
+    resolved_at: Mapped[Optional[datetime]] = mapped_column(DateTime, default=None)
     
     # Relationships
     user: Mapped["User"] = relationship("User", back_populates="scorecards")
@@ -327,6 +347,9 @@ class RoundScore(Base):
     fighter1_score: Mapped[int] = mapped_column(Integer, nullable=False)  # 7-10
     fighter2_score: Mapped[int] = mapped_column(Integer, nullable=False)  # 7-10
     
+    # Resolution field
+    is_correct: Mapped[Optional[bool]] = mapped_column(default=None)
+    
     # Relationships
     scorecard: Mapped["Scorecard"] = relationship("Scorecard", back_populates="round_scores")
     
@@ -338,4 +361,93 @@ class RoundScore(Base):
     
     def __repr__(self) -> str:
         return f"<RoundScore(round={self.round_number}, score={self.fighter1_score}-{self.fighter2_score})>"
+
+
+class FightResult(Base):
+    """Official fight result with winner, method, and optional judge scorecards."""
+    
+    __tablename__ = "fight_results"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    fight_id: Mapped[int] = mapped_column(ForeignKey("fights.id"), nullable=False, unique=True)
+    winner: Mapped[FightWinner] = mapped_column(SQLEnum(FightWinner), nullable=False)
+    method: Mapped[WinMethod] = mapped_column(SQLEnum(WinMethod), nullable=False)
+    finish_round: Mapped[Optional[int]] = mapped_column(Integer)  # Round when fight ended (for finishes)
+    finish_time: Mapped[Optional[str]] = mapped_column(String(10))  # Time in round (e.g., "2:34")
+    is_resolved: Mapped[bool] = mapped_column(default=False)  # Whether predictions/scorecards have been resolved
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=utc_now, onupdate=utc_now
+    )
+    
+    # Relationships
+    fight: Mapped["Fight"] = relationship("Fight", back_populates="result")
+    official_scorecards: Mapped[List["OfficialScorecard"]] = relationship(
+        "OfficialScorecard", back_populates="fight_result", cascade="all, delete-orphan"
+    )
+    
+    __table_args__ = (
+        Index("idx_fight_result_fight", "fight_id"),
+    )
+    
+    def __repr__(self) -> str:
+        return f"<FightResult(id={self.id}, fight={self.fight_id}, winner={self.winner.value}, method={self.method.value})>"
+
+
+class OfficialScorecard(Base):
+    """Official judge scorecard for a fight."""
+    
+    __tablename__ = "official_scorecards"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    fight_result_id: Mapped[int] = mapped_column(ForeignKey("fight_results.id"), nullable=False)
+    judge_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    
+    # Relationships
+    fight_result: Mapped["FightResult"] = relationship("FightResult", back_populates="official_scorecards")
+    round_scores: Mapped[List["OfficialRoundScore"]] = relationship(
+        "OfficialRoundScore", back_populates="official_scorecard", cascade="all, delete-orphan"
+    )
+    
+    __table_args__ = (
+        Index("idx_official_scorecard_result", "fight_result_id"),
+    )
+    
+    @property
+    def total_fighter1(self) -> int:
+        """Calculate total score for fighter 1."""
+        return sum(rs.fighter1_score for rs in self.round_scores)
+    
+    @property
+    def total_fighter2(self) -> int:
+        """Calculate total score for fighter 2."""
+        return sum(rs.fighter2_score for rs in self.round_scores)
+    
+    def __repr__(self) -> str:
+        return f"<OfficialScorecard(id={self.id}, judge='{self.judge_name}', score={self.total_fighter1}-{self.total_fighter2})>"
+
+
+class OfficialRoundScore(Base):
+    """Individual round score from an official judge scorecard."""
+    
+    __tablename__ = "official_round_scores"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    official_scorecard_id: Mapped[int] = mapped_column(ForeignKey("official_scorecards.id"), nullable=False)
+    round_number: Mapped[int] = mapped_column(Integer, nullable=False)  # 1, 2, 3, 4, or 5
+    fighter1_score: Mapped[int] = mapped_column(Integer, nullable=False)  # 7-10
+    fighter2_score: Mapped[int] = mapped_column(Integer, nullable=False)  # 7-10
+    
+    # Relationships
+    official_scorecard: Mapped["OfficialScorecard"] = relationship("OfficialScorecard", back_populates="round_scores")
+    
+    __table_args__ = (
+        # One score per round per official scorecard
+        UniqueConstraint("official_scorecard_id", "round_number", name="uq_official_scorecard_round"),
+        Index("idx_official_roundscore_scorecard", "official_scorecard_id"),
+    )
+    
+    def __repr__(self) -> str:
+        return f"<OfficialRoundScore(round={self.round_number}, score={self.fighter1_score}-{self.fighter2_score})>"
 

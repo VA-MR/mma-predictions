@@ -58,6 +58,15 @@
 
 .fighter {
   display: flex;
+  transition: all 0.2s;
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  margin: calc(-1 * var(--space-xs));
+}
+
+.fighter:hover {
+  background: rgba(0, 212, 255, 0.1);
+  transform: scale(1.05);
 }
 
 .fighter-1 {

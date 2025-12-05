@@ -66,6 +66,9 @@ export default function PredictionForm({
   };
 
   if (existingPrediction) {
+    const isResolved = existingPrediction.resolved_at !== null;
+    const isCorrect = existingPrediction.is_correct;
+
     return (
       <div className="prediction-submitted">
         <h3>Ваш прогноз</h3>
@@ -79,7 +82,26 @@ export default function PredictionForm({
             {WIN_METHODS.find(m => m.value === existingPrediction.win_method)?.label}
           </span>
         </div>
-        <p className="locked-notice">Прогнозы нельзя изменить после отправки</p>
+        
+        {isResolved && (
+          <div className={`prediction-result ${isCorrect ? 'correct' : 'incorrect'}`}>
+            {isCorrect ? (
+              <>
+                <span className="result-icon">✓</span>
+                <span className="result-text">Правильный прогноз!</span>
+              </>
+            ) : (
+              <>
+                <span className="result-icon">✗</span>
+                <span className="result-text">Неправильный прогноз</span>
+              </>
+            )}
+          </div>
+        )}
+        
+        {!isResolved && (
+          <p className="locked-notice">Прогнозы нельзя изменить после отправки</p>
+        )}
       </div>
     );
   }

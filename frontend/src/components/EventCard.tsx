@@ -35,6 +35,11 @@ export default function EventCard({ event, index }: EventCardProps) {
             <span className={`event-org ${getOrgClass(event.organization)}`}>
               {event.organization}
             </span>
+            {!event.is_upcoming && (
+              <span className="event-status-badge completed">
+                ✓ Завершено
+              </span>
+            )}
           </div>
 
           <h3 className="event-name">{event.name}</h3>

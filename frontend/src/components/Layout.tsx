@@ -1,16 +1,32 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useAdminAuth } from '../hooks/useAdminAuth';
 import AuthModal from './AuthModal';
 import './Layout.css';
 
 export default function Layout() {
   const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+  const { isAdminAuthenticated, adminLogout } = useAdminAuth();
   const location = useLocation();
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
+
+  const handleLogout = () => {
+    // Logout from both auth systems
+    logout();
+    adminLogout();
+  };
+
+  // User is considered logged in if either Telegram or Admin auth is active
+  const isLoggedIn = isAuthenticated || isAdminAuthenticated;
+  
+  // Display name for the user
+  const displayName = isAdminAuthenticated 
+    ? 'Admin' 
+    : (user?.username || user?.first_name || 'User');
 
   return (
     <div className="layout">
@@ -19,10 +35,8 @@ export default function Layout() {
           <div className="container">
             <div className="header-content">
               <Link to="/" className="logo">
-                <div className="logo-icon">🥊</div>
-                <span className="logo-text">
-                  META<span>RATINGS</span>
-                </span>
+                <div className="logo-icon">ΜΣΤΑ</div>
+                <span className="logo-text">MMA</span>
               </Link>
 
               <nav className="nav">
@@ -40,20 +54,31 @@ export default function Layout() {
                     Мой профиль
                   </Link>
                 )}
+                {/* Only show Admin link if logged in as admin */}
+                {isAdminAuthenticated && (
+                  <Link 
+                    to="/admin" 
+                    className={`nav-link admin-link ${isActive('/admin') ? 'active' : ''}`}
+                  >
+                    Админ
+                  </Link>
+                )}
               </nav>
 
               <div className="auth-section">
-                {isAuthenticated && user ? (
+                {isLoggedIn ? (
                   <div className="user-menu">
-                    {user.photo_url && (
+                    {isAdminAuthenticated ? (
+                      <div className="admin-badge">🔐</div>
+                    ) : user?.photo_url ? (
                       <img 
                         src={user.photo_url} 
                         alt={user.username || 'User'} 
                         className="user-avatar" 
                       />
-                    )}
-                    <span className="user-name">{user.username || 'User'}</span>
-                    <button onClick={logout} className="logout-btn">
+                    ) : null}
+                    <span className="user-name">{displayName}</span>
+                    <button onClick={handleLogout} className="logout-btn">
                       Выйти
                     </button>
                   </div>

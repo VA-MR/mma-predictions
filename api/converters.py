@@ -20,11 +20,26 @@ def fighter_to_response(fighter: Fighter) -> FighterResponse:
     return FighterResponse(
         id=fighter.id,
         name=fighter.name,
+        name_english=fighter.name_english,
         country=fighter.country,
         wins=fighter.wins,
         losses=fighter.losses,
         draws=fighter.draws,
+        age=fighter.age,
+        height_cm=fighter.height_cm,
+        weight_kg=fighter.weight_kg,
+        reach_cm=fighter.reach_cm,
+        style=fighter.style,
+        weight_class=fighter.weight_class,
+        ranking=fighter.ranking,
+        wins_ko_tko=fighter.wins_ko_tko,
+        wins_submission=fighter.wins_submission,
+        wins_decision=fighter.wins_decision,
+        losses_ko_tko=fighter.losses_ko_tko,
+        losses_submission=fighter.losses_submission,
+        losses_decision=fighter.losses_decision,
         profile_url=fighter.profile_url,
+        profile_scraped=fighter.profile_scraped,
         record=fighter.record,
     )
 
@@ -59,6 +74,7 @@ def fight_to_response(fight: Fight) -> FightResponse:
         fight_order=fight.fight_order,
         fighter1=fighter1,
         fighter2=fighter2,
+        result=fight.result,
         event_name=event_name,
         event_date=event_date,
         organization=organization,
@@ -101,6 +117,8 @@ def prediction_to_response(
         win_method=prediction.win_method.value,
         confidence=prediction.confidence,
         created_at=prediction.created_at,
+        is_correct=prediction.is_correct,
+        resolved_at=prediction.resolved_at,
         user=user_response,
         fight=fight_response,
     )
@@ -126,6 +144,7 @@ def scorecard_to_response(
             round_number=rs.round_number,
             fighter1_score=rs.fighter1_score,
             fighter2_score=rs.fighter2_score,
+            is_correct=rs.is_correct,
         )
         for rs in sorted(scorecard.round_scores, key=lambda x: x.round_number)
     ]
@@ -139,6 +158,9 @@ def scorecard_to_response(
         total_fighter1=scorecard.total_fighter1,
         total_fighter2=scorecard.total_fighter2,
         winner=scorecard.winner,
+        correct_rounds=scorecard.correct_rounds,
+        total_rounds=scorecard.total_rounds,
+        resolved_at=scorecard.resolved_at,
         user=user_response,
         fight=fight_response,
     )

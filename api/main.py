@@ -15,9 +15,11 @@ from api.routes import (
     auth_router,
     events_router,
     fights_router,
+    fighters_router,
     predictions_router,
     scorecards_router,
     users_router,
+    admin_router,
 )
 
 # Global database instance (singleton)
@@ -93,9 +95,11 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api")
 app.include_router(events_router, prefix="/api")
 app.include_router(fights_router, prefix="/api")
+app.include_router(fighters_router, prefix="/api")
 app.include_router(predictions_router, prefix="/api")
 app.include_router(scorecards_router, prefix="/api")
 app.include_router(users_router, prefix="/api")
+app.include_router(admin_router, prefix="/api")
 
 
 @app.get("/health")

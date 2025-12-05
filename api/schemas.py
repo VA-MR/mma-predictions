@@ -13,6 +13,13 @@ class PredictedWinnerEnum(str, Enum):
     FIGHTER2 = "fighter2"
 
 
+class FightWinnerEnum(str, Enum):
+    FIGHTER1 = "fighter1"
+    FIGHTER2 = "fighter2"
+    DRAW = "draw"
+    NO_CONTEST = "no_contest"
+
+
 class WinMethodEnum(str, Enum):
     KO_TKO = "ko_tko"
     SUBMISSION = "submission"
@@ -32,6 +39,21 @@ class FighterBase(BaseModel):
 
 class FighterResponse(FighterBase):
     id: int
+    name_english: Optional[str] = None
+    age: Optional[int] = None
+    height_cm: Optional[int] = None
+    weight_kg: Optional[float] = None
+    reach_cm: Optional[int] = None
+    style: Optional[str] = None
+    weight_class: Optional[str] = None
+    ranking: Optional[str] = None
+    wins_ko_tko: Optional[int] = None
+    wins_submission: Optional[int] = None
+    wins_decision: Optional[int] = None
+    losses_ko_tko: Optional[int] = None
+    losses_submission: Optional[int] = None
+    losses_decision: Optional[int] = None
+    profile_scraped: bool = False
     record: str
 
     class Config:
@@ -52,6 +74,7 @@ class FightResponse(FightBase):
     event_id: int
     fighter1: Optional[FighterResponse] = None
     fighter2: Optional[FighterResponse] = None
+    result: Optional['FightResultResponse'] = None
     # Event metadata
     event_name: Optional[str] = None
     event_date: Optional[date] = None
@@ -89,6 +112,8 @@ class EventResponse(EventBase):
     url: str
     fight_count: int = 0
     main_event: Optional[MainEventInfo] = None
+    scraped_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -152,6 +177,8 @@ class PredictionResponse(BaseModel):
     win_method: WinMethodEnum
     confidence: Optional[int] = None
     created_at: datetime
+    is_correct: Optional[bool] = None
+    resolved_at: Optional[datetime] = None
     user: Optional[UserResponse] = None
     fight: Optional["FightResponse"] = None
 
@@ -180,6 +207,7 @@ class RoundScoreResponse(BaseModel):
     round_number: int
     fighter1_score: int
     fighter2_score: int
+    is_correct: Optional[bool] = None
 
     class Config:
         from_attributes = True
@@ -199,6 +227,9 @@ class ScorecardResponse(BaseModel):
     total_fighter1: int
     total_fighter2: int
     winner: Optional[str] = None
+    correct_rounds: int = 0
+    total_rounds: int = 0
+    resolved_at: Optional[datetime] = None
     user: Optional[UserResponse] = None
     fight: Optional["FightResponse"] = None
 
@@ -236,4 +267,114 @@ class ErrorResponse(BaseModel):
     success: bool = False
     error: str
     detail: Optional[str] = None
+
+
+# Admin CRUD schemas
+
+class OrganizationResponse(BaseModel):
+    name: str
+    event_count: int = 0
+
+
+class FighterCreateUpdate(BaseModel):
+    name: str
+    name_english: Optional[str] = None
+    country: Optional[str] = None
+    wins: int = 0
+    losses: int = 0
+    draws: int = 0
+    age: Optional[int] = None
+    height_cm: Optional[int] = None
+    weight_kg: Optional[float] = None
+    reach_cm: Optional[int] = None
+    style: Optional[str] = None
+    weight_class: Optional[str] = None
+    ranking: Optional[str] = None
+    wins_ko_tko: Optional[int] = 0
+    wins_submission: Optional[int] = 0
+    wins_decision: Optional[int] = 0
+    losses_ko_tko: Optional[int] = 0
+    losses_submission: Optional[int] = 0
+    losses_decision: Optional[int] = 0
+    profile_url: Optional[str] = None
+    profile_scraped: bool = False
+
+
+class EventCreateUpdate(BaseModel):
+    name: str
+    organization: str
+    event_date: Optional[date] = None
+    time_msk: Optional[str] = None
+    location: Optional[str] = None
+    url: str
+    slug: str
+    is_upcoming: bool = True
+
+
+class FightCreateUpdate(BaseModel):
+    event_id: int
+    fighter1_id: Optional[int] = None
+    fighter2_id: Optional[int] = None
+    card_type: str = "main"
+    weight_class: Optional[str] = None
+    rounds: Optional[int] = None
+    scheduled_time: Optional[str] = None
+    fight_order: Optional[int] = None
+
+
+# Fight Result schemas
+class OfficialRoundScoreCreate(BaseModel):
+    round_number: int = Field(..., ge=1, le=5)
+    fighter1_score: int = Field(..., ge=7, le=10)
+    fighter2_score: int = Field(..., ge=7, le=10)
+
+
+class OfficialRoundScoreResponse(BaseModel):
+    id: int
+    round_number: int
+    fighter1_score: int
+    fighter2_score: int
+
+    class Config:
+        from_attributes = True
+
+
+class OfficialScorecardCreate(BaseModel):
+    judge_name: str
+    round_scores: List[OfficialRoundScoreCreate]
+
+
+class OfficialScorecardResponse(BaseModel):
+    id: int
+    judge_name: str
+    round_scores: List[OfficialRoundScoreResponse] = []
+    total_fighter1: int
+    total_fighter2: int
+
+    class Config:
+        from_attributes = True
+
+
+class FightResultCreate(BaseModel):
+    winner: FightWinnerEnum
+    method: WinMethodEnum
+    finish_round: Optional[int] = Field(None, ge=1, le=5)
+    finish_time: Optional[str] = None
+    official_scorecards: List[OfficialScorecardCreate] = []
+
+
+class FightResultResponse(BaseModel):
+    id: int
+    fight_id: int
+    winner: FightWinnerEnum
+    method: WinMethodEnum
+    finish_round: Optional[int] = None
+    finish_time: Optional[str] = None
+    is_resolved: bool
+    official_scorecards: List[OfficialScorecardResponse] = []
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
 

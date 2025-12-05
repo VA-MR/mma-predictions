@@ -3,6 +3,7 @@
 import hashlib
 import hmac
 import os
+import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -14,7 +15,12 @@ from pydantic import BaseModel
 from database import Database, User
 
 # Configuration
-SECRET_KEY = os.getenv("JWT_SECRET", "your-secret-key-change-in-production")
+# Generate a random secret if not provided (for development only)
+_default_secret = secrets.token_urlsafe(32)
+SECRET_KEY = os.getenv("JWT_SECRET", _default_secret)
+if SECRET_KEY == _default_secret:
+    print("⚠️  WARNING: Using auto-generated JWT_SECRET. Set JWT_SECRET env var in production!")
+
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 30
@@ -140,49 +146,25 @@ async def get_current_user(
     return None
 
 
-# Guest user for development (Telegram auth disabled)
-class GuestUser:
-    """Temporary guest user for development."""
-    id = 1
-    telegram_id = 12345
-    username = "guest"
-    first_name = "Guest"
-    last_name = "User"
-    photo_url = None
-    display_name = "Guest User"
-    created_at = None
-
-
 async def require_auth(
     user: Optional[User] = Depends(get_current_user),
-    db: Database = Depends(get_db),
 ) -> User:
-    """Require authenticated user - returns guest user if not authenticated.
-    
-    NOTE: Telegram auth is temporarily disabled for development.
+    """Require authenticated user.
     
     Args:
         user: Current user from get_current_user.
-        db: Database instance.
         
     Returns:
-        Authenticated user or guest user.
+        Authenticated user.
+        
+    Raises:
+        HTTPException: If user is not authenticated.
     """
-    if user:
-        return user
-    
-    # Create or get guest user for development
-    with db.get_session() as session:
-        guest = db.get_or_create_user(
-            session=session,
-            telegram_id=12345,
-            first_name="Guest",
-            last_name="User",
-            username="guest",
-            auth_date=datetime.now(timezone.utc),
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required",
+            headers={"WWW-Authenticate": "Bearer"},
         )
-        session.commit()
-        session.refresh(guest)
-        session.expunge(guest)
-        return guest
+    return user
 

@@ -28,6 +28,13 @@
 .fighter-display {
   text-align: center;
   padding: var(--space-lg);
+  transition: all 0.2s;
+  border-radius: var(--radius-md);
+}
+
+.fighter-display:hover {
+  background: rgba(0, 212, 255, 0.05);
+  transform: scale(1.02);
 }
 
 .fighter-display.fighter1 {

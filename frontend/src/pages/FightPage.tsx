@@ -17,6 +17,7 @@ import { useAuth } from '../hooks/useAuth';
 import PredictionForm from '../components/PredictionForm';
 import ScorecardForm from '../components/ScorecardForm';
 import CrowdWisdom from '../components/CrowdWisdom';
+import FighterModal from '../components/FighterModal';
 import { getCountryFlag } from '../utils/formatters';
 import './FightPage.css';
 
@@ -35,6 +36,7 @@ export default function FightPage() {
   const [activeTab, setActiveTab] = useState<Tab>('prediction');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalFighterId, setModalFighterId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +94,13 @@ export default function FightPage() {
     }
   };
 
+  const handleFighterClick = (fighterId: number | undefined) => {
+    if (!fighterId || fighterId <= 0) {
+      return;
+    }
+    setModalFighterId(fighterId);
+  };
+
   if (isLoading) {
     return (
       <div className="container">
@@ -128,7 +137,11 @@ export default function FightPage() {
       >
         <div className="matchup-display">
           {/* Fighter 1 */}
-          <div className="fighter-display fighter1">
+          <div 
+            className="fighter-display fighter1"
+            onClick={() => handleFighterClick(fight.fighter1?.id)}
+            style={{ cursor: fight.fighter1 ? 'pointer' : 'default' }}
+          >
             <div className="fighter-flag-large">
               {getCountryFlag(fight.fighter1?.country)}
             </div>
@@ -152,7 +165,11 @@ export default function FightPage() {
           </div>
 
           {/* Fighter 2 */}
-          <div className="fighter-display fighter2">
+          <div 
+            className="fighter-display fighter2"
+            onClick={() => handleFighterClick(fight.fighter2?.id)}
+            style={{ cursor: fight.fighter2 ? 'pointer' : 'default' }}
+          >
             <div className="fighter-flag-large">
               {getCountryFlag(fight.fighter2?.country)}
             </div>
@@ -223,6 +240,15 @@ export default function FightPage() {
           />
         )}
       </motion.div>
+
+      {/* Fighter Modal */}
+      {modalFighterId && (
+        <FighterModal
+          fighterId={modalFighterId}
+          isOpen={modalFighterId !== null}
+          onClose={() => setModalFighterId(null)}
+        />
+      )}
     </div>
   );
 }

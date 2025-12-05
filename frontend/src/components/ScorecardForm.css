@@ -110,6 +110,20 @@
   gap: var(--space-md);
   align-items: center;
   padding: var(--space-sm) 0;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.round-row.correct {
+  background: rgba(212, 237, 218, 0.3);
+  border: 1px solid #c3e6cb;
+  padding: var(--space-sm);
+}
+
+.round-row.incorrect {
+  background: rgba(248, 215, 218, 0.3);
+  border: 1px solid #f5c6cb;
+  padding: var(--space-sm);
 }
 
 .score-buttons {
@@ -296,6 +310,31 @@
   justify-content: center;
   gap: var(--space-xs);
   font-weight: 600;
+}
+
+.round-result-icon {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.scorecard-resolution {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: #e7f3ff;
+  border: 2px solid #b6d4fe;
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.resolution-summary {
+  font-size: 0.9rem;
+  color: #084298;
+  margin: 0;
+}
+
+.resolution-summary strong {
+  font-weight: 700;
+  color: #052c65;
 }
 
 @media (max-width: 480px) {

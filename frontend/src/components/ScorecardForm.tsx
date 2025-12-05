@@ -117,48 +117,61 @@ export default function ScorecardForm({
 
       {/* Round Scores */}
       <div className="rounds-container">
-        {roundScores.map((rs) => (
-          <motion.div
-            key={rs.round_number}
-            className="round-row"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: rs.round_number * 0.05 }}
-          >
-            {/* Fighter 1 Score */}
-            <div className="score-buttons fighter1">
-              {SCORES.map((score) => (
-                <button
-                  key={score}
-                  type="button"
-                  className={`score-btn ${rs.fighter1_score === score ? 'selected' : ''}`}
-                  onClick={() => !isSubmitted && updateScore(rs.round_number, 'fighter1', score)}
-                  disabled={isSubmitted}
-                >
-                  {score}
-                </button>
-              ))}
-            </div>
+        {roundScores.map((rs) => {
+          const roundScore = existingScorecard?.round_scores.find(r => r.round_number === rs.round_number);
+          const isCorrect = roundScore?.is_correct;
+          const isResolved = existingScorecard?.resolved_at !== null;
+          
+          return (
+            <motion.div
+              key={rs.round_number}
+              className={`round-row ${isResolved && isCorrect !== undefined ? (isCorrect ? 'correct' : 'incorrect') : ''}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: rs.round_number * 0.05 }}
+            >
+              {/* Fighter 1 Score */}
+              <div className="score-buttons fighter1">
+                {SCORES.map((score) => (
+                  <button
+                    key={score}
+                    type="button"
+                    className={`score-btn ${rs.fighter1_score === score ? 'selected' : ''}`}
+                    onClick={() => !isSubmitted && updateScore(rs.round_number, 'fighter1', score)}
+                    disabled={isSubmitted}
+                  >
+                    {score}
+                  </button>
+                ))}
+              </div>
 
-            {/* Round Number */}
-            <div className="round-number">R{rs.round_number}</div>
+              {/* Round Number */}
+              <div className="round-number">
+                R{rs.round_number}
+                {isResolved && isCorrect !== undefined && (
+                  <span className="round-result-icon">
+                    {isCorrect ? '✓' : '✗'}
+                  </span>
+                )}
+              </div>
 
-            {/* Fighter 2 Score */}
-            <div className="score-buttons fighter2">
-              {SCORES.map((score) => (
-                <button
-                  key={score}
-                  type="button"
-                  className={`score-btn ${rs.fighter2_score === score ? 'selected' : ''}`}
-                  onClick={() => !isSubmitted && updateScore(rs.round_number, 'fighter2', score)}
-                  disabled={isSubmitted}
-                >
-                  {score}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+              {/* Fighter 2 Score */}
+              <div className="score-buttons fighter2">
+                {SCORES.map((score) => (
+                  <button
+                    key={score}
+                    type="button"
+                    className={`score-btn ${rs.fighter2_score === score ? 'selected' : ''}`}
+                    onClick={() => !isSubmitted && updateScore(rs.round_number, 'fighter2', score)}
+                    disabled={isSubmitted}
+                  >
+                    {score}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Totals */}
@@ -207,8 +220,18 @@ export default function ScorecardForm({
         </>
       )}
 
-      {isSubmitted && (
-        <p className="locked-notice">Ваш скоркард отправлен и зафиксирован</p>
+      {isSubmitted && existingScorecard && (
+        <>
+          {existingScorecard.resolved_at ? (
+            <div className="scorecard-resolution">
+              <p className="resolution-summary">
+                Вы угадали <strong>{existingScorecard.correct_rounds} из {existingScorecard.total_rounds}</strong> раундов правильно
+              </p>
+            </div>
+          ) : (
+            <p className="locked-notice">Ваш скоркард отправлен и зафиксирован</p>
+          )}
+        </>
       )}
     </div>
   );
